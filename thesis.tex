@@ -1,0 +1,156 @@
+  \documentclass[twoside=true, %  doppelseitiger Druck
+    DIV=11,% DIV Faktor für Satzspiegelberechnung - muss bei anderen Schriftgrößen als 11pt angepasst werden , sie Doku zu KOMA Script
+    BCOR=15mm, % Bindekorrektur
+    headinclude=true,
+    footinclude=false,
+    pagesize,%         write pagesize to DVI or PDF
+    fontsize=11pt,%             use this font size
+    paper=a4,%          use ISO A4
+    bibliography=totoc,%         write bibliography-chapter to table of contents
+    numbers=noenddot,
+    xcolor=dvipsnames
+  ]{scrartcl}
+
+\usepackage{fixltx2e}
+\usepackage[utf8]{inputenc}
+\usepackage{makeidx}
+\usepackage{amsfonts}
+%\usepackage[slantedGreek,sc]{mathpazo}  % Schriftart Palatino
+\usepackage{lmodern}    % statt mathpazo, falls CM fonts verwendet werden sollen
+\usepackage[scaled=.95]{helvet}
+\usepackage{courier}
+\usepackage[T1]{fontenc}
+\usepackage{textcomp}
+\usepackage{amsmath}            % standard math notation (vectors/sets/...)
+\usepackage{bm}        % standard math notation (fonts)
+\usepackage{fixmath}        % standard math notation (fonts)
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{scrpage2}
+% \usepackage{pstool}  % einbinden falls psfrag verwendet werden soll
+\usepackage{epstopdf}
+\usepackage[ngerman]{babel}
+\usepackage{ellipsis}  % Korrigiert den Weißraum um Auslassungspunkte
+\usepackage{microtype}  % optischer Randausgleich etc.
+\usepackage{url}
+\usepackage[table,dvipsnames]{xcolor}
+\usepackage[facing=yes]{floatrow}       % mehrere Gleitobjekte nebeneinander/caption neben Bild/Tabelle
+\usepackage{framed}
+\usepackage{marginnote}	
+\usepackage[printonlyused]{acronym}
+\usepackage{ltablex, array, multirow, makecell, ragged2e} %Tabellenzeug
+\usepackage[backend=bibtex,style=numeric]{biblatex} %Bibliographie
+\usepackage{changepage}
+\usepackage{tcolorbox}
+\usepackage{tikz} %tikz-stuff
+\usepackage{pgf-pie}
+\usetikzlibrary{shapes,calc,positioning}
+\usepackage{blindtext}
+\usepackage{todonotes}
+
+\selectlanguage{ngerman}
+
+\recalctypearea	
+
+%----==== colors ====----%
+%\definecolor{primary}{HTML}{CEE9FF}%
+%\definecolor{secondary}{HTML}{FFCDCB}%
+%\definecolor{tertiary}{HTML}{C9CC90}%
+\colorlet{primary}{CornflowerBlue}%
+\colorlet{secondary}{Thistle}%
+\colorlet{tertiary}{Apricot}%
+\definecolor{hightlight}{HTML}{da6b24}%
+\definecolor{dark}{HTML}{32829A}%
+\colorlet{quotemark}{primary}
+
+%----==== numbers ====----%
+\newlength\fwidth
+%\setlength{\pwidth}{.24\textwidth}
+
+%----==== graphics ====----%
+\pgfdeclarelayer{bg}    % declare background layer
+\pgfsetlayers{bg,main}  % set the order of the layers (main is the standard layer)
+
+%Einstellungen für Bild-/Tabellenbeschriftung neben dem Bild
+\floatsetup[figure]{capbesideposition={inside,top}}
+\floatsetup[table]{capbesideposition={inside,top},style=plaintop}
+\renewfloatcommand{fcapside}{figure}[\capbeside][\FBwidth]
+\newfloatcommand{tcapside}{table}[\capbeside][\FBwidth]
+
+%----==== customization ====----%
+%\deffootnote{1em}{1em}{%
+% \makebox[1em][l]{\thefootnotemark}}
+ 
+\setkomafont{paragraph}{\normalfont\normalsize\bfseries}
+\renewcommand{\descriptionlabel}[1]{\hspace{\labelsep}\textbf{#1}}
+
+\newtcolorbox{mybox}[1]{colback=primary!20,colframe=primary,sharp corners=all,boxrule=1pt,fonttitle=\bfseries,title=#1}
+
+%----==== new environments ====----%
+\newenvironment{citeenv}{%
+  \def\FrameCommand{%
+    \hspace{1pt}%
+    {\color{primary}\vrule width 2pt}%
+    {\color{primary!20}\vrule width 15pt}%
+    \colorbox{primary!20}%
+  }%
+  \MakeFramed{\advance\hsize-\width\FrameRestore}%
+  % \noindent\hspace{-4.55pt}% disable indenting first paragraph
+  \begin{adjustwidth}{}{15pt}%
+  \vspace{8pt}%
+}
+{%
+  \end{adjustwidth}\endMakeFramed%
+}
+ 
+%----==== new commands ====----%
+\include{fquotes}
+
+\newcommand{\tbox}[3]{
+\begin{tikzpicture}
+	\tikzstyle{title} = [rectangle, fill=primary!40, draw=primary, inner sep=0.5em, minimum size=1em]
+	\tikzstyle{body} = [rectangle, fill=primary!20, draw=primary, inner sep=0.5em, minimum size=1em]
+	
+	\node[title, text width=#3](title) at (0,0) {#2};
+	\node[body, text width=#3, anchor=north west](body) at (title.south west){#1};  
+\end{tikzpicture}
+} 
+
+\newcommand{\tikzbar}[2]{
+	\hspace{-1.4ex}
+	\tikz[baseline=-0.6ex]{
+		\node at (0,0) {#1};
+		\node[fill=#2, anchor=west, minimum height=1em, minimum width=#1*2mm] at (0.3, 0) {}
+	}
+}
+
+\newcommand{\evaluation}[3][0]{\draw node at (#2+.5,#3+.5) {#1};}
+
+\newcolumntype{L}{>{\raggedright\arraybackslash}X}
+\newcolumntype{C}{>{\centering\arraybackslash}X}	
+\newcolumntype{P}[1]{>{\raggedright\arraybackslash}p{#1}}
+
+%----==== preparations ====----%
+\addbibresource{thesis.bib}
+
+%-----===== begin document =====-----%
+\begin{document}
+
+\tikzstyle{every picture}+=[remember picture]
+
+\def\figdir{figures}
+\def\tabledir{tables}
+
+\include{title}
+
+\clearpage
+\include{chapters}
+
+\listoffigures
+
+\appendix
+
+\printbibliography
+
+\end{document}
